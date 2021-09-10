@@ -1,8 +1,7 @@
-package com.udacity.asteroidradar.api
+package com.udacity.asteroidradar.network
 
-import android.os.Build
-import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.Constants
+import com.udacity.asteroidradar.domain.Asteroid
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -34,8 +33,10 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
             val isPotentiallyHazardous = asteroidJson
                 .getBoolean("is_potentially_hazardous_asteroid")
 
-            val asteroid = Asteroid(id, codename, formattedDate, absoluteMagnitude,
-                estimatedDiameter, relativeVelocity, distanceFromEarth, isPotentiallyHazardous)
+            val asteroid = Asteroid(
+                id, codename, formattedDate, absoluteMagnitude,
+                estimatedDiameter, relativeVelocity, distanceFromEarth, isPotentiallyHazardous
+            )
             asteroidList.add(asteroid)
         }
     }
@@ -50,6 +51,9 @@ private fun getNextSevenDaysFormattedDates(): ArrayList<String> {
     for (i in 0..Constants.DEFAULT_END_DATE_DAYS) {
         val currentTime = calendar.time
         val dateFormat = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
+        // NASA APIs are using UTC TimeZone
+        // data fails with JSONException for IST (my local) zone around 12:30 am
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
         formattedDateList.add(dateFormat.format(currentTime))
         calendar.add(Calendar.DAY_OF_YEAR, 1)
     }

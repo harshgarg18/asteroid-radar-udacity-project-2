@@ -8,4 +8,26 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TextAppearance.Title" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/default_text_color</item>
+        <item name="fontFamily">@font/averia_sans_libre_bold</item>
+        <item name="android:textAlignment">gravity</item>
+        <item name="android:textDirection">locale</item>
+    </style>
+
+    <style name="TextAppearance.Description" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textColor">@color/text_grey</item>
+        <item name="fontFamily">@font/averia_sans_libre</item>
+        <item name="android:textAlignment">gravity</item>
+        <item name="android:textDirection">locale</item>
+    </style>
+
+    <style name="TextAppearance.Button" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="cornerRadius">16dp</item>
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">@font/averia_sans_libre_bold</item>
+        <item name="android:textAlignment">gravity</item>
+        <item name="android:textDirection">locale</item>
+    </style>
+
 </resources>
