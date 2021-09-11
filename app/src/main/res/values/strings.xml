@@ -22,4 +22,5 @@
     <string name="save_this_asteroid">Save this Asteroid</string>
     <string name="asteroid_saved">Asteroid Saved!</string>
     <string name="au_help">Check what does \"au\" mean</string>
+    <string name="network_error_toast">Error fetching latest asteroid data</string>
 </resources>

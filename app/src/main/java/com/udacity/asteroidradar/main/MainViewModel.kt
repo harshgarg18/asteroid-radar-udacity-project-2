@@ -1,11 +1,14 @@
 package com.udacity.asteroidradar.main
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.*
+import com.udacity.asteroidradar.R
 import com.udacity.asteroidradar.database.AsteroidRadarDatabase
 import com.udacity.asteroidradar.domain.Asteroid
 import com.udacity.asteroidradar.repository.AsteroidRepository
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 enum class MenuOptionsFilter { WEEK, TODAY, SAVED }
 enum class AsteroidApiStatus { LOADING, DONE }
@@ -17,7 +20,6 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     private val asteroidMenuOption = MutableLiveData<MenuOptionsFilter>()
 
-//    val asteroids = asteroidRepository.asteroids
     val asteroids = Transformations.switchMap(asteroidMenuOption) {
         asteroidRepository.getAsteroids(it)
     }
@@ -30,8 +32,18 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
 
     init {
         viewModelScope.launch {
-            asteroidRepository.refreshPictureOfDay()
-            asteroidRepository.refreshAsteroids()
+            try {
+                asteroidRepository.refreshPictureOfDay()
+                asteroidRepository.refreshAsteroids()
+            } catch (e: Exception) {
+                Toast.makeText(
+                    app,
+                    app.applicationContext.getString(R.string.network_error_toast),
+                    Toast.LENGTH_SHORT
+                ).show()
+                Timber.e(e)
+                asteroidApiStatus.value = AsteroidApiStatus.DONE
+            }
         }
         asteroidMenuOption.value = MenuOptionsFilter.WEEK
     }

@@ -2,17 +2,19 @@ package com.udacity.asteroidradar.network
 
 import com.udacity.asteroidradar.Constants
 import com.udacity.asteroidradar.domain.Asteroid
+import com.udacity.asteroidradar.formatWithDefaultTimeZone
+import com.udacity.asteroidradar.getCurrentDate
 import org.json.JSONObject
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
     val nearEarthObjectsJson = jsonResult.getJSONObject("near_earth_objects")
 
     val asteroidList = ArrayList<Asteroid>()
 
-    val nextSevenDaysFormattedDates = getNextSevenDaysFormattedDates()
+    val nextSevenDaysFormattedDates = (0..Constants.DEFAULT_END_DATE_DAYS).map {
+        getCurrentDate(it).formatWithDefaultTimeZone
+    }
+
     for (formattedDate in nextSevenDaysFormattedDates) {
         val dateAsteroidJsonArray = nearEarthObjectsJson.getJSONArray(formattedDate)
 
@@ -42,21 +44,4 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
     }
 
     return asteroidList
-}
-
-private fun getNextSevenDaysFormattedDates(): ArrayList<String> {
-    val formattedDateList = ArrayList<String>()
-
-    val calendar = Calendar.getInstance()
-    for (i in 0..Constants.DEFAULT_END_DATE_DAYS) {
-        val currentTime = calendar.time
-        val dateFormat = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT, Locale.getDefault())
-        // NASA APIs are using UTC TimeZone
-        // data fails with JSONException for IST (my local) zone around 12:30 am
-        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
-        formattedDateList.add(dateFormat.format(currentTime))
-        calendar.add(Calendar.DAY_OF_YEAR, 1)
-    }
-
-    return formattedDateList
 }
