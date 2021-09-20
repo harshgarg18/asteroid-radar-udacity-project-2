@@ -153,16 +153,20 @@
                     app:astronomicalUnitText="@{asteroid.distanceFromEarth}"
                     tools:text="0.0924 au" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/save_asteroid"
                     style="@style/TextAppearance.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="24dp"
+                    android:backgroundTint="@color/card_background"
                     android:onClick="@{() -> viewModel.onSaveAsteroid()}"
-                    android:padding="4dp"
-                    android:text="@string/save_this_asteroid" />
+                    android:padding="16dp"
+                    android:textAllCaps="false"
+                    android:elevation="4dp"
+                    android:text="@string/save_this_asteroid"
+                    app:cornerRadius="8dp" />
 
             </LinearLayout>
         </ScrollView>
